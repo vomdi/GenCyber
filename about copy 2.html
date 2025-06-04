@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cybersecurity Quiz Game</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f0c29, #302b63, #24243e);
+      font-family: 'Inter', sans-serif;
+      color: white;
+    }
+    .question-box {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .glow {
+      text-shadow: 0 0 5px #9f7aea, 0 0 10px #9f7aea, 0 0 20px #9f7aea;
+    }
+    header {
+      background: radial-gradient(circle at top center, rgba(159, 122, 234, 0.5), transparent);
+      padding: 2rem 0;
+      width: 100%;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-6">
+  <header>
+    <h1 class="text-4xl md:text-5xl font-extrabold glow text-purple-400">Cybersecurity Quiz Game</h1>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center w-full">
+    <div id="game" class="w-full max-w-xl p-6 rounded-xl question-box shadow-xl mt-8">
+      <h2 id="question" class="text-2xl font-semibold mb-4">Loading question...</h2>
+      <div id="choices" class="space-y-3"></div>
+      <div id="feedback" class="mt-4 text-lg font-bold"></div>
+      <button id="nextBtn" class="mt-6 px-5 py-2 bg-purple-600 rounded-full shadow hover:bg-purple-700 transition hidden">Next Question</button>
+    </div>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        question: "What is phishing?",
+        choices: [
+          "A type of malware",
+          "A method of stealing personal information by pretending to be trustworthy",
+          "A firewall setting",
+          "A safe online tool"
+        ],
+        answer: 1
+      },
+      {
+        question: "Which of these is the strongest password?",
+        choices: [
+          "password123",
+          "ilovecats",
+          "Q8!rT2$z@9",
+          "12345678"
+        ],
+        answer: 2
+      },
+      {
+        question: "How can you recognize a secure website?",
+        choices: [
+          "It loads quickly",
+          "It has pop-ups",
+          "It uses HTTPS and a lock icon appears in the address bar",
+          "It has a long URL"
+        ],
+        answer: 2
+      },
+      {
+        question: "What should you do if you receive a suspicious email?",
+        choices: [
+          "Reply with your info",
+          "Click the link to investigate",
+          "Mark it as spam or phishing",
+          "Forward it to friends"
+        ],
+        answer: 2
+      }
+    ];
+
+    let current = 0;
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function showQuestion() {
+      const q = questions[current];
+      questionEl.textContent = q.question;
+      choicesEl.innerHTML = "";
+      feedbackEl.textContent = "";
+      nextBtn.classList.add("hidden");
+
+      q.choices.forEach((choice, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.className = "block w-full bg-gray-800 hover:bg-purple-600 text-left px-4 py-2 rounded transition";
+        btn.onclick = () => checkAnswer(index);
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(index) {
+      const correct = questions[current].answer;
+      if (index === correct) {
+        feedbackEl.textContent = "✅ Correct!";
+        feedbackEl.classList.remove("text-red-400");
+        feedbackEl.classList.add("text-green-400");
+      } else {
+        feedbackEl.textContent = "❌ Incorrect. Try to be more careful online.";
+        feedbackEl.classList.remove("text-green-400");
+        feedbackEl.classList.add("text-red-400");
+      }
+      nextBtn.classList.remove("hidden");
+    }
+
+    nextBtn.onclick = () => {
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        questionEl.textContent = "🎉 You've finished the quiz!";
+        choicesEl.innerHTML = "<p class='text-slate-300'>Thanks for playing and staying safe online!</p>";
+        nextBtn.classList.add("hidden");
+      }
+    };
+
+    showQuestion();
+  </script>
+</body>
+</html>
